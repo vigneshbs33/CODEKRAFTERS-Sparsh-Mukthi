@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparsh Mukthi - Gesture Control Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #00f3ff;
+            --secondary-color: #ff00ff;
+            --background-color: #0a0a0a;
+            --panel-color: rgba(16, 16, 24, 0.9);
+            --text-color: #ffffff;
+            --border-color: #00f3ff;
+            --hover-color: #ff00ff;
+            --success-color: #00ff00;
+            --warning-color: #ffff00;
+            --error-color: #ff0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--background-color);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(255, 0, 255, 0.05) 0%, transparent 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--primary-color) 20%, 
+                var(--primary-color) 80%, 
+                transparent 100%);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5),
+                        0 0 10px rgba(0, 243, 255, 0.3);
+            margin-bottom: 1rem;
+            letter-spacing: 4px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            text-shadow: 0 0 3px rgba(255, 0, 255, 0.3);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .version {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .instructions-panel {
+            background: var(--panel-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .instructions-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .instructions-panel:hover::before {
+            transform: translateX(100%);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .panel-header i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: var(--primary-color);
+        }
+
+        .panel-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .command-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .command-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .command-item.default {
+            border-color: var(--secondary-color);
+        }
+
+        .command-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .command-desc {
+            font-size: 1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .command-key {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .command-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .command-button {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .command-button:hover {
+            background: var(--primary-color);
+            color: var(--background-color);
+        }
+
+        .usage-instructions {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .usage-instructions h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .usage-instructions h3 i {
+            margin-right: 0.5rem;
+        }
+
+        .usage-instructions ol {
+            list-style-type: none;
+            counter-reset: inst;
+            padding: 0;
+        }
+
+        .usage-instructions li {
+            counter-increment: inst;
+            margin-bottom: 1rem;
+            padding-left: 2.5rem;
+            position: relative;
+            text-align: left;
+        }
+
+        .usage-instructions li::before {
+            content: counter(inst);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.8rem;
+            height: 1.8rem;
+            background: var(--primary-color);
+            color: var(--background-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--panel-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .card h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .card p {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .cyber-button {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 1rem 2rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .cyber-button:hover {
+            background: var(--primary-color);
+            color: var(--background-color);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--primary-color);
+        }
+
+        .cyber-button i {
+            font-size: 1.2rem;
+        }
+
+        .status-message {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.9);
+            border-left: 3px solid var(--primary-color);
+            display: none;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--panel-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .commands-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        .key-mapping-modal .modal-content {
+            max-width: 400px;
+        }
+
+        .key-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.8rem;
+            width: 100%;
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .key-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        .key-hint {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SPARSH MUKTHI</h1>
+            <p class="subtitle">Advanced Gesture Control System</p>
+            <p class="version">Version 1.0.0</p>
+        </header>
+
+        <div class="instructions-panel">
+            <div class="panel-header">
+                <i class="fas fa-hand-paper"></i>
+                <h2>Available Commands</h2>
+            </div>
+            <div class="commands-grid" id="gestureList">
+                <!-- Gesture list will be populated dynamically -->
+            </div>
+            <div class="usage-instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+                <ol>
+                    <li>Train the default gestures or add your own custom gestures</li>
+                    <li>Customize key mappings by clicking the "Map Key" button on any command</li>
+                    <li>Click "Train New Gesture" to record your gestures</li>
+                    <li>Once training is complete, click "Live Prediction" to start</li>
+                    <li>Perform the gestures in front of your camera to trigger the mapped keys</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <i class="fas fa-graduation-cap card-icon"></i>
+                <h2>Train New Gesture</h2>
+                <p>Create and train new custom gestures for your control system. Follow the instructions in the training window to record your gestures.</p>
+                <button class="cyber-button" onclick="openTrainingModal()">
+                    <i class="fas fa-plus"></i>
+                    Start Training
+                </button>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-camera card-icon"></i>
+                <h2>Live Prediction</h2>
+                <p>Use your trained gestures in real-time. The system will recognize your gestures and perform the associated actions.</p>
+                <button class="cyber-button" onclick="startPrediction()">
+                    <i class="fas fa-play"></i>
+                    Start Prediction
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 Sparsh Mukthi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <div id="trainingModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTrainingModal()"><i class="fas fa-times"></i></button>
+            <div class="panel-header">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>Train New Gesture</h2>
+            </div>
+            <form id="gestureForm" onsubmit="return startTraining(event)">
+                <div class="form-group">
+                    <label for="gestureName">Gesture Name:</label>
+                    <input type="text" id="gestureName" required placeholder="e.g., wave_right, peace_sign">
+                </div>
+                <div class="form-group">
+                    <label for="gestureFunction">Gesture Function:</label>
+                    <textarea id="gestureFunction" required placeholder="Describe what this gesture should do..."></textarea>
+                </div>
+                <button type="submit" class="cyber-button">
+                    <i class="fas fa-play"></i>
+                    Start Training
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="statusMessage" class="status-message"></div>
+
+    <div id="keyMappingModal" class="modal key-mapping-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeKeyMappingModal()"><i class="fas fa-times"></i></button>
+            <div class="panel-header">
+                <i class="fas fa-keyboard"></i>
+                <h2>Map Key for <span id="mappingGestureName"></span></h2>
+            </div>
+            <div class="key-hint">Press the key or key combination you want to map</div>
+            <input type="text" id="keyInput" class="key-input" readonly placeholder="Press key(s)...">
+            <button class="cyber-button" onclick="saveKeyMapping()">
+                <i class="fas fa-save"></i>
+                Save Mapping
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentMappingGesture = null;
+        let capturedKey = null;
+
+        // Load existing gestures when the page loads
+        window.addEventListener('load', loadGestures);
+
+        function showStatus(message, isError = false) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.style.display = 'block';
+            statusElement.style.borderColor = isError ? '#ff0000' : '#00f3ff';
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 3000);
+        }
+
+        function openTrainingModal() {
+            document.getElementById('trainingModal').classList.add('active');
+        }
+
+        function closeTrainingModal() {
+            document.getElementById('trainingModal').classList.remove('active');
+            document.getElementById('gestureForm').reset();
+        }
+
+        function updateGestureList(gestures) {
+            const gestureList = document.getElementById('gestureList');
+            gestureList.innerHTML = '';
+            
+            if (Object.keys(gestures).length === 0) {
+                gestureList.innerHTML = `
+                    <div class="command-item" style="grid-column: 1 / -1; text-align: center;">
+                        <span class="command-name"><i class="fas fa-info-circle"></i> No Gestures Yet</span>
+                        <span class="command-desc">Click "Train New Gesture" to add your first gesture</span>
+                    </div>
+                `;
+                return;
+            }
+            
+            Object.entries(gestures).forEach(([name, details]) => {
+                const gestureItem = document.createElement('div');
+                gestureItem.className = `command-item${details.default ? ' default' : ''}`;
+                
+                let keyText = '';
+                if (details.key) {
+                    keyText = `<span class="command-key">
+                        <i class="fas fa-keyboard"></i> ${details.key}
+                    </span>`;
+                }
+
+                gestureItem.innerHTML = `
+                    <span class="command-name">
+                        <i class="fas fa-hand-paper"></i> ${name}
+                    </span>
+                    <span class="command-desc">${details.function}</span>
+                    ${keyText}
+                    <div class="command-actions">
+                        <button class="command-button" onclick="openKeyMappingModal('${name}')">
+                            <i class="fas fa-keyboard"></i> Map Key
+                        </button>
+                        ${!details.trained ? `
+                            <button class="command-button" onclick="startTrainingForGesture('${name}')">
+                                <i class="fas fa-graduation-cap"></i> Train
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                gestureList.appendChild(gestureItem);
+            });
+        }
+
+        function openKeyMappingModal(gestureName) {
+            currentMappingGesture = gestureName;
+            document.getElementById('mappingGestureName').textContent = gestureName;
+            document.getElementById('keyInput').value = '';
+            document.getElementById('keyMappingModal').classList.add('active');
+            capturedKey = null;
+        }
+
+        function closeKeyMappingModal() {
+            document.getElementById('keyMappingModal').classList.remove('active');
+            currentMappingGesture = null;
+            capturedKey = null;
+        }
+
+        // Key capture logic
+        document.getElementById('keyInput').addEventListener('keydown', function(e) {
+            e.preventDefault();
+            
+            let keys = [];
+            if (e.ctrlKey) keys.push('CTRL');
+            if (e.shiftKey) keys.push('SHIFT');
+            if (e.altKey) keys.push('ALT');
+            
+            // Add the main key if it's not a modifier
+            if (!['Control', 'Shift', 'Alt'].includes(e.key)) {
+                keys.push(e.key.toUpperCase());
+            }
+            
+            capturedKey = keys.join('+');
+            this.value = capturedKey;
+        });
+
+        async function saveKeyMapping() {
+            if (!currentMappingGesture || !capturedKey) return;
+
+            try {
+                const response = await fetch('/update_mapping', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        gesture: currentMappingGesture,
+                        key: capturedKey
+                    })
+                });
+                const data = await response.json();
+                showStatus(data.message, data.status === 'error');
+                if (data.status === 'success') {
+                    closeKeyMappingModal();
+                    loadGestures();
+                }
+            } catch (error) {
+                showStatus('Error updating key mapping', true);
+            }
+        }
+
+        async function startTrainingForGesture(gestureName) {
+            try {
+                const response = await fetch('/start_training', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: gestureName,
+                        function: `Default ${gestureName} gesture`
+                    })
+                });
+                const data = await response.json();
+                showStatus(data.message, data.status === 'error');
+            } catch (error) {
+                showStatus('Error starting training process', true);
+            }
+        }
+
+        async function loadGestures() {
+            try {
+                const response = await fetch('/get_gestures');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    updateGestureList(data.gestures);
+                }
+            } catch (error) {
+                showStatus('Error loading gestures', true);
+            }
+        }
+
+        async function startPrediction() {
+            try {
+                const response = await fetch('/start_prediction');
+                const data = await response.json();
+                showStatus(data.message, data.status === 'error');
+            } catch (error) {
+                showStatus('Error starting prediction process', true);
+            }
+        }
+    </script>
+</body>
+</html> 
