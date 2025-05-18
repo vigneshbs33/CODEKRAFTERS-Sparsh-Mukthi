@@ -1,0 +1,7 @@
+{
+    "jump": ["jump", "jimp", "jum", "hop"],
+    "left": ["left", "let", "lft"],
+    "right": ["right", "rt", "rite"],
+    "forward": ["forward", "go", "move", "ahead"],
+    "back": ["back", "reverse", "bck"]
+}
