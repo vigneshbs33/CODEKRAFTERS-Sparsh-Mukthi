@@ -195,9 +195,7 @@ GRAB_THRESHOLD = 30    # Object grab detection
    - Adjust detection thresholds
    - Fine-tune gesture mappings
 
-## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contributing
 
@@ -218,12 +216,7 @@ We welcome contributions! Areas of interest:
    - VR environment integration
    - Performance optimization
 
-## 📧 Contact & Support
 
-- GitHub Issues for bug reports
-- Feature requests welcome
-- Join our Discord community
-- Email: [Your Contact]
 
 ## 🙏 Acknowledgments
 
