@@ -69,7 +69,7 @@ Sparsh Mukthi is a comprehensive gesture recognition system designed for three k
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/sparsh-mukthi.git
+git clone https://github.com/vigneshbs33/CODEKRAFTERS-Sparsh-Mukthi
 cd sparsh-mukthi
 ```
 
