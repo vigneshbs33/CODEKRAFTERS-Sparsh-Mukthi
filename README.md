@@ -1,7 +1,7 @@
 # Sparsh Mukthi - Advanced Gesture Control System
 
 <div align="center">
-  <img src="<a href="https://i.ibb.co/217zjLmn/temp.webp" alt="temp" border="0"></a>" alt="Sparsh Mukthi Logo" width="200"/>
+  <img src="<a href="https://i.ibb.co/217zjLmn/temp.webp" alt="Sparsh Mukthi Logo" width="200"/>
   <p><i>Touchless Control System for Education, Healthcare, and VR Gaming</i></p>
 </div>
 
