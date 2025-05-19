@@ -229,5 +229,5 @@ We welcome contributions! Areas of interest:
 
 <div align="center">
   Made with ❤️ by CODEKRAFTERS<br>
-  © 2024 Sparsh Mukthi. All rights reserved.
+  © 2025 Sparsh Mukthi. All rights reserved.
 </div> 
