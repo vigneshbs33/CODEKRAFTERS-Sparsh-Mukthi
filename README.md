@@ -1,11 +1,5 @@
 # Sparsh Mukthi - Advanced Gesture Control System
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Flask](https://img.shields.io/badge/Flask-2.0%2B-green)
-![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-red)
-![MediaPipe](https://img.shields.io/badge/MediaPipe-0.8%2B-orange)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-
 <div align="center">
   <img src="static/images/logo.png" alt="Sparsh Mukthi Logo" width="200"/>
   <p><i>Touchless Control System for Education, Healthcare, and VR Gaming</i></p>
