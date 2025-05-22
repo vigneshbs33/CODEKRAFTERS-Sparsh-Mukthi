@@ -25,6 +25,14 @@ Sparsh Mukthi is a comprehensive gesture recognition system designed for three k
   - Advanced gesture combinations
   - Smooth motion tracking
 
+- **Voice Integration**:
+  - Natural language commands
+  - Voice-gesture hybrid control
+  - Multi-language support
+  - Custom voice command mapping
+  - Noise-resistant recognition
+  - Real-time voice feedback
+
 - **Custom AI Gestures (Main Application)**:
   - Train personalized gestures
   - Map to keyboard/mouse actions
@@ -138,8 +146,19 @@ sparsh-mukthi/
 - **Core**: Python 3.8+, OpenCV 4.8+
 - **AI/ML**: MediaPipe, NumPy, Scikit-learn
 - **VR Integration**: PyGame, AutoPy
+- **Voice Processing**: SpeechRecognition, PyAudio, NLTK
 - **Web Interface**: Flask, SocketIO
 - **Input Control**: PyAutoGUI, Pynput
+
+### Voice Integration Setup
+
+```python
+# Voice configuration settings
+LANGUAGE = 'en-US'           # Default language
+CONFIDENCE_THRESHOLD = 0.85  # Voice recognition confidence
+AMBIENT_ADJUST = True        # Dynamic noise adjustment
+COMMAND_TIMEOUT = 2.0       # Command registration timeout
+```
 
 ### System Requirements
 
@@ -195,7 +214,12 @@ GRAB_THRESHOLD = 30    # Object grab detection
    - Adjust detection thresholds
    - Fine-tune gesture mappings
 
-
+4. **Voice Integration**:
+   - Check microphone permissions and settings
+   - Calibrate ambient noise levels
+   - Test in different acoustic environments
+   - Verify language settings
+   - Update voice command dictionary
 
 ## 🤝 Contributing
 
@@ -215,8 +239,6 @@ We welcome contributions! Areas of interest:
    - Game-specific controls
    - VR environment integration
    - Performance optimization
-
-
 
 ## 🙏 Acknowledgments
 
