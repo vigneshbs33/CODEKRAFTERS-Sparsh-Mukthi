@@ -115,7 +115,22 @@ python Main-flow-gesture/air-contol.py
 - Adjust tracking sensitivity
 - Set game-specific gestures
 
-3. **Custom AI Gestures**:
+3. **Voice Control Setup**:
+```bash
+cd Voice-auto
+# For command-based voice control:
+python final-model.py
+# For real-time transcription:
+python live_transcriber.py
+```
+- Download Vosk model (vosk-model-small-en-us-0.15)
+- Configure voice commands in commands.json
+- Test microphone input
+- Choose between:
+  - Command mode: Voice-to-action mapping with feedback
+  - Transcription mode: Real-time speech-to-text
+
+4. **Custom AI Gestures**:
 ```bash
 python app.py
 ```
@@ -134,6 +149,10 @@ sparsh-mukthi/
 ├── Main-flow-gesture/    # Specialized control modules
 │   ├── edu-hcare.py      # Education/Healthcare interface
 │   └── air-contol.py     # VR/Gaming controller
+├── Voice-auto/           # Voice control system
+│   ├── final-model.py    # Voice recognition engine
+│   ├── commands.json     # Voice command mappings
+│   └── live_transcriber.py # Real-time transcription
 ├── static/               # Web assets
 ├── templates/            # Web interface
 ├── models/               # AI models
@@ -146,19 +165,9 @@ sparsh-mukthi/
 - **Core**: Python 3.8+, OpenCV 4.8+
 - **AI/ML**: MediaPipe, NumPy, Scikit-learn
 - **VR Integration**: PyGame, AutoPy
-- **Voice Processing**: SpeechRecognition, PyAudio, NLTK
+- **Voice Processing**: Vosk, sounddevice, pyttsx3
 - **Web Interface**: Flask, SocketIO
 - **Input Control**: PyAutoGUI, Pynput
-
-### Voice Integration Setup
-
-```python
-# Voice configuration settings
-LANGUAGE = 'en-US'           # Default language
-CONFIDENCE_THRESHOLD = 0.85  # Voice recognition confidence
-AMBIENT_ADJUST = True        # Dynamic noise adjustment
-COMMAND_TIMEOUT = 2.0       # Command registration timeout
-```
 
 ### System Requirements
 
@@ -166,12 +175,14 @@ COMMAND_TIMEOUT = 2.0       # Command registration timeout
   - CPU: Dual-core 2.0 GHz
   - RAM: 4GB
   - Camera: 720p 30fps
+  - Microphone: Basic built-in
   - Storage: 500MB
 
 - **Recommended**:
   - CPU: Quad-core 2.5 GHz
   - RAM: 8GB
   - Camera: 1080p 60fps
+  - Microphone: Noise-canceling
   - Storage: 1GB
   - VR Ready GPU (for VR features)
 
@@ -190,6 +201,20 @@ CLICK_THRESHOLD = 40              # Gesture detection sensitivity
 ZOOM_THRESHOLD = 10    # VR zoom sensitivity
 SCROLL_FACTOR = 20     # Movement multiplier
 GRAB_THRESHOLD = 30    # Object grab detection
+```
+
+### Voice Control (Voice-auto/)
+```python
+# Command Mode (final-model.py)
+SAMPLE_RATE = 16000    # Audio sampling rate
+DURATION = 2           # Listen duration (seconds)
+COOLDOWN = 1.5        # Command cooldown time
+MODEL_PATH = "vosk-model-small-en-us-0.15"  # Voice model
+
+# Transcription Mode (live_transcriber.py)
+BLOCK_SIZE = 2048     # Lower latency for real-time
+SHOW_PARTIAL = True   # Show partial results
+WORDS_MODE = False    # Optimize for continuous speech
 ```
 
 ### Custom AI Gestures (app.py)
@@ -217,9 +242,11 @@ GRAB_THRESHOLD = 30    # Object grab detection
 4. **Voice Integration**:
    - Check microphone permissions and settings
    - Calibrate ambient noise levels
-   - Test in different acoustic environments
+   - Test in both command and transcription modes
    - Verify language settings
    - Update voice command dictionary
+   - Adjust block size for latency vs accuracy
+   - Fine-tune cooldown times for commands
 
 ## 🤝 Contributing
 
@@ -252,4 +279,4 @@ We welcome contributions! Areas of interest:
 <div align="center">
   Made with ❤️ by CODEKRAFTERS<br>
   © 2025 Sparsh Mukthi. All rights reserved.
-</div> 
+</div>
