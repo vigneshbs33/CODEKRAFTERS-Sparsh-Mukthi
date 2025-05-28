@@ -109,7 +109,7 @@ python Main-flow-gesture/edu-hcare.py
 
 2. **VR & Gaming Control**:
 ```bash
-python Main-flow-gesture/air-contol.py
+python Main-flow-gesture/air-controller.py
 ```
 - Connect VR devices (if applicable)
 - Adjust tracking sensitivity
