@@ -266,6 +266,7 @@ We welcome contributions! Areas of interest:
    - Game-specific controls
    - VR environment integration
    - Performance optimization
+   - 0 Latency
 
 ## 🙏 Acknowledgments
 
