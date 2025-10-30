@@ -43,7 +43,7 @@ def create_negative_samples(landmarks, num_samples=5):
     return negative_samples
 
 # Load data
-base_dir = "gesture_data"
+base_dir ="gesture_data"
 gesture_types = ['stop', 'left', 'right', 'up', 'down', 'none', 'undo', 'redo']
 X = []
 y = []
