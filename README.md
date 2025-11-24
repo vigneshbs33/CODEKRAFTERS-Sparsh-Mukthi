@@ -633,6 +633,6 @@ We welcome contributions! Areas of interest:
 ---
 
 <div align="center">
-  Made with ❤️ by CODEKRAFTERS<br>
+  Made by CODEKRAFTERS<br>
   © 2025 Sparsh Mukthi. All rights reserved.
 </div>
